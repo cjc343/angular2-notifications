@@ -1,17 +1,21 @@
-import {Injectable, EventEmitter} from "@angular/core"
+import { Injectable } from "@angular/core"
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
+import { Notification } from './notification';
+import { NotificationEvent } from './notificationEvent';
 
 @Injectable()
 export class NotificationsService {
-    
-    public emiter: EventEmitter<any> = new EventEmitter();
+    private emitter: Subject<NotificationEvent> = new Subject<NotificationEvent>();
 
-    set(notification: any, to: boolean) {
+    set(notification: Notification, to: boolean) {
         notification.id = notification.override && notification.override.id ? notification.override.id : Math.random().toString(36).substring(3);
-        this.emiter.emit({command: "set", notification: notification, add: to});
+        this.emitter.next({command: "set", notification: notification, add: to});
         return notification;
-
     };
-    getChangeEmitter() { return this.emiter }
+
+    getChangeEmitter(): Observable<NotificationEvent> { return this.emitter.asObservable(); }
 
     //// Access methods
     success(title: string, content: string, override?: any) { return this.set({title: title, content: content, type: "success", override: override}, true) }
@@ -28,8 +32,7 @@ export class NotificationsService {
 
     // Remove all notifications method
     remove(id?: string) {
-        if (id) this.emiter.emit({command: "clean", id: id});
-        else this.emiter.emit({command: "cleanAll"});
+        if (id) this.emitter.next({command: "clean", id: id});
+        else this.emitter.next({command: "cleanAll"});
     }
-
 }

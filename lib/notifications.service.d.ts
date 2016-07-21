@@ -1,14 +1,16 @@
-import { EventEmitter } from "@angular/core";
+import { Observable } from 'rxjs/Observable';
+import { Notification } from './notification';
+import { NotificationEvent } from './notificationEvent';
 export declare class NotificationsService {
-    emiter: EventEmitter<any>;
-    set(notification: any, to: boolean): any;
-    getChangeEmitter(): EventEmitter<any>;
-    success(title: string, content: string, override?: any): any;
-    error(title: string, content: string, override?: any): any;
-    alert(title: string, content: string, override?: any): any;
-    info(title: string, content: string, override?: any): any;
-    bare(title: string, content: string, override?: any): any;
-    create(title: string, content: string, type: string, override?: any): any;
-    html(html: any, type: string, override?: any): any;
+    private emitter;
+    set(notification: Notification, to: boolean): Notification;
+    getChangeEmitter(): Observable<NotificationEvent>;
+    success(title: string, content: string, override?: any): Notification;
+    error(title: string, content: string, override?: any): Notification;
+    alert(title: string, content: string, override?: any): Notification;
+    info(title: string, content: string, override?: any): Notification;
+    bare(title: string, content: string, override?: any): Notification;
+    create(title: string, content: string, type: string, override?: any): Notification;
+    html(html: any, type: string, override?: any): Notification;
     remove(id?: string): void;
 }
